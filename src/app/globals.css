@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Design tokens for the site. */
+@theme {
+  --color-bg: #000000;
+  --color-fg: #ffffff;
+  --color-grid-text: #ffffffcf;
+  --color-accent: #b92929;
+
+  --font-body: var(--font-libre-baskerville), Georgia, serif;
+  --font-display: var(--font-im-fell), Georgia, serif;
+  --font-vollkorn: var(--font-vollkorn), Georgia, serif;
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+}
+
+body {
+  /* Base size; individual elements override it. */
+  font-size: 14px;
+  overflow-x: hidden;
+}
+
+/* No visible scrollbar, matching the original site. Scrolling still works.
+   The page's scrollbar belongs to the root element in Chrome, so `html` is
+   the one that matters; body is kept for completeness. */
+html,
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* The site is black-on-black; keep the native scrollbar from flashing white. */
+:root {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Film title overlay.
+   Resting (X): below centre, invisible. Hover (Y): centre, visible.
+   One transition covers both directions: in = fade in while rising X->Y,
+   out = fade out while dropping Y->X.
+   Plain CSS on purpose - Tailwind v4's translate-y-* utilities set the
+   `translate` property, not `transform`, so a `transition: transform` never
+   animated them and the text snapped. */
+.work-title-overlay {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 500ms ease-out,
+    transform 500ms ease-out;
+}
+
+.work-title-overlay.is-hovered {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* No hover on touch: always visible, never moves. */
+@media (hover: none) {
+  .work-title-overlay {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
